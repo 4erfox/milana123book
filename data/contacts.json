@@ -1,0 +1,14 @@
+[
+  {
+    "href": "https://etiquettebook.com",
+    "title": "Сайт",
+    "subtitle": "etiquettebook.com",
+    "external": true
+  },
+  {
+    "href": "mailto:etiquettebook2026@gmail.com",
+    "title": "Email",
+    "subtitle": "etiquettebook2026@gmail.com",
+    "external": false
+  }
+]

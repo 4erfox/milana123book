@@ -1,0 +1,578 @@
+/* ============================================================
+   СБРОС СТИЛЕЙ
+   Убираем браузерные отступы и задаём box-sizing по умолчанию
+   ============================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   CSS-ПЕРЕМЕННЫЕ (цветовая схема и типографика)
+   Меняй здесь — изменится везде
+   ============================================================ */
+:root {
+    --bg-primary:    #FAFAF9;   /* фон страницы — чуть тёплый белый */
+    --bg-secondary:  #FFFFFF;   /* фон карточек и блоков */
+    --text-primary:  #1A1A1A;   /* основной текст */
+    --text-secondary:#4A4A4A;   /* вторичный текст (подписи, мета) */
+    --text-tertiary: #6B6B6B;   /* слабый текст (хлебные крошки, TOC) */
+    --accent-color:  #C1502E;   /* акцент — терракотовый */
+    --accent-hover:  #A23E20;   /* акцент при наведении — темнее */
+    --border-color:  #E5E5E5;   /* цвет разделителей */
+    --sidebar-bg:    #F5F5F4;   /* фон боковой панели и info-box */
+}
+
+/* ============================================================
+   БАЗОВЫЕ СТИЛИ BODY
+   ============================================================ */
+body {
+    font-family: 'Literata', Georgia, serif; /* книжный шрифт с засечками */
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.75;
+    overflow-x: hidden; /* прячем горизонтальную прокрутку */
+}
+
+/* ============================================================
+   ШАПКА САЙТА (фиксированная)
+   ============================================================ */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(8px); /* размытие под шапкой */
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.25rem 2rem;
+    z-index: 100;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.header-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Логотип */
+.logo {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.logo:hover {
+    color: var(--accent-color);
+}
+
+/* Кнопка «Назад» */
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+.back-btn:hover {
+    background: var(--bg-primary);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+.back-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ============================================================
+   ОБЩИЙ МАКЕТ СТРАНИЦЫ
+   Двухколоночник: боковое меню + основной контент
+   ============================================================ */
+.page-wrapper {
+    display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-top: 90px;    /* отступ под фиксированную шапку */
+    gap: 3rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+/* ============================================================
+   БОКОВОЕ ОГЛАВЛЕНИЕ (TOC)
+   «Прилипает» к экрану при скролле
+   ============================================================ */
+.toc-sidebar {
+    position: sticky;
+    top: 110px;
+    width: 260px;
+    height: fit-content;
+    max-height: calc(100vh - 130px);
+    padding: 1.5rem;
+    background: var(--sidebar-bg);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    overflow-y: auto;
+    flex-shrink: 0; /* не сжимается при нехватке места */
+}
+
+/* Тонкий скроллбар внутри TOC */
+.toc-sidebar::-webkit-scrollbar       { width: 5px; }
+.toc-sidebar::-webkit-scrollbar-track { background: transparent; }
+.toc-sidebar::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+
+/* Заголовок «НА ЭТОЙ СТРАНИЦЕ» */
+.toc-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+    margin-bottom: 1rem;
+}
+
+/* Список пунктов TOC */
+.toc-list {
+    list-style: none; /* убираем маркеры — это навигация, не контент */
+}
+
+.toc-link {
+    display: block;
+    padding: 0.5rem 0;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    transition: color 0.3s ease;
+    line-height: 1.4;
+}
+.toc-link:hover  { color: var(--accent-color); }
+.toc-link.active { color: var(--accent-color); font-weight: 500; } /* активный раздел при скролле */
+
+/* ============================================================
+   ОСНОВНАЯ КОЛОНКА С КОНТЕНТОМ
+   ============================================================ */
+.main-content {
+    flex: 1;
+    padding: 2rem 0 5rem;
+    max-width: 720px; /* оптимальная ширина для чтения */
+    min-width: 0;     /* fix: flex-child не выходит за пределы */
+}
+
+/* ============================================================
+   ШАПКА СТРАНИЦЫ (заголовок + мета)
+   ============================================================ */
+.page-header {
+    margin-bottom: 3rem;
+}
+
+/* Хлебные крошки */
+.breadcrumb {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+    margin-bottom: 1rem;
+}
+.breadcrumb a {
+    color: var(--text-tertiary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.breadcrumb a:hover { color: var(--accent-color); }
+
+/* Заголовок H1 */
+.page-title {
+    font-size: 2.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+}
+
+/* Строка «Время чтения · Глава» */
+.page-meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+/* ============================================================
+   СЕКЦИИ КОНТЕНТА
+   Каждая секция — один раздел главы (H2 + его содержимое)
+   ============================================================ */
+.content-section {
+    margin-bottom: 3rem;
+    scroll-margin-top: 110px; /* чтобы якорная ссылка не уходила под шапку */
+}
+
+/* Заголовок раздела H2 */
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    margin-top: 2.5rem;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+
+/* Подзаголовок H3 / H4 */
+.subsection-title {
+    font-size: 1.375rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    color: var(--text-primary);
+}
+
+/* ============================================================
+   ОСНОВНОЙ ТЕКСТ АБЗАЦЕВ
+   ============================================================ */
+.section-text {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    text-align: justify;
+    hyphens: auto; /* автоматические переносы слов */
+}
+
+/* Drop cap — большая акцентная первая буква первого абзаца секции */
+.section-text.dropcap::first-letter {
+    font-size: 3.5rem;
+    font-weight: 600;
+    line-height: 1;
+    float: left;
+    margin-right: 0.5rem;
+    margin-top: 0.1rem;
+    color: var(--accent-color);
+}
+
+/* Clearfix после dropcap-абзаца — сбрасывает float ДО того как появится список */
+.section-text.dropcap::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+/* Список после абзаца — отступ сверху */
+.section-text + ul,
+.section-text + ol,
+.section-text + .content-list {
+    margin-top: 0.75rem;
+}
+
+
+/* Подсветка выделенного текста (желтоватый маркер снизу) */
+.emphasis {
+    background: linear-gradient(180deg, transparent 60%, rgba(193, 80, 46, 0.15) 60%);
+    padding: 0 0.25rem;
+}
+
+/* ============================================================
+   ЦИТАТА (blockquote без списка)
+   ============================================================ */
+.quote-block {
+    border-left: 4px solid var(--accent-color);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--text-secondary);
+}
+.quote-block p {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+}
+
+/* ============================================================
+   СПИСКИ В КОНТЕНТЕ
+   Используются классы content-list (из рендерера) и нативные ul/ol
+   ============================================================ */
+
+/* Списки, сгенерированные рендерером */
+.content-list {
+    margin: 1.5rem 0;
+    padding-left: 2rem;
+}
+.content-list li {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+.content-list li strong {
+    color: var(--accent-color); /* жирный текст внутри пунктов — акцентный цвет */
+    font-weight: 600;
+}
+
+/* Нативные ul / ol (на случай прямого HTML в контенте) */
+ul, ol {
+    margin: 1.5rem 0;
+    padding-left: 2rem;
+}
+ul li, ol li {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+/* Маркеры списков — акцентный цвет */
+ul li::marker, ol li::marker {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+/* Вложенность: диск → круг → квадрат */
+ul              { list-style-type: disc; }
+ul ul           { list-style-type: circle; margin-top: 0.75rem; margin-bottom: 0.75rem; }
+ul ul ul        { list-style-type: square; }
+
+/* Вложенность: цифры → буквы */
+ol              { list-style-type: decimal; }
+ol ol           { list-style-type: lower-alpha; margin-top: 0.75rem; margin-bottom: 0.75rem; }
+
+/* ============================================================
+   INFO-BOX (цитата-блок со списком — > **Заголовок** в MD)
+   ============================================================ */
+.info-box {
+    background: var(--sidebar-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+.info-box-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+/* Список внутри info-box — без стандартных маркеров,
+   вместо них — псевдоэлемент • в акцентном цвете */
+.info-list {
+    list-style: none;
+    padding-left: 0;
+}
+.info-list li {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+.info-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+/* ============================================================
+   CODE-БЛОК (кастомный блок с заголовком)
+   ============================================================ */
+.code-block {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+.code-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-bottom: 0.75rem;
+}
+.code-content p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+}
+
+/* ============================================================
+   БЛОК ТЕРМИНА
+   ============================================================ */
+.term-block {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin: 1rem 0;
+    transition: all 0.3s ease;
+}
+.term-block:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 2px 8px rgba(193, 80, 46, 0.1);
+}
+.term-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+}
+.term-definition {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+}
+
+/* ============================================================
+   ИЗОБРАЖЕНИЕ С ПОДПИСЬЮ
+   ============================================================ */
+.content-figure {
+    margin: 2rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+}
+.content-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.content-figure figcaption {
+    padding: 0.75rem 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+    line-height: 1.5;
+    border-top: 1px solid var(--border-color);
+}
+
+/* ============================================================
+   ТАБЛИЦА ЭТИКЕТА (используется на странице phone-etiquette)
+   ============================================================ */
+.table-wrapper {
+    overflow-x: auto; /* горизонтальный скролл на узких экранах */
+    margin: 2rem 0;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-secondary);
+}
+.etiquette-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Literata', serif;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+}
+.etiquette-table th {
+    background: var(--sidebar-bg);
+    padding: 1.25rem 1rem;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-color);
+    border-bottom: 2px solid var(--border-color);
+}
+.etiquette-table td {
+    padding: 1.25rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: top;
+}
+.etiquette-table tr:last-child td {
+    border-bottom: none; /* последняя строка без нижней линии */
+}
+
+/* Левая колонка «Не стоит говорить» */
+.etiquette-table td:first-child {
+    color: var(--text-secondary);
+    font-weight: 500;
+    width: 35%;
+    background: rgba(193, 80, 46, 0.02);
+    border-right: 1px solid var(--border-color);
+}
+
+/* Правая колонка «Лучше сказать» */
+.etiquette-table td:last-child {
+    color: var(--text-primary);
+}
+
+/* ============================================================
+   АДАПТИВ: планшет (до 1024px)
+   Переходим в одноколоночный макет
+   ============================================================ */
+@media (max-width: 1024px) {
+    .page-wrapper {
+        flex-direction: column; /* TOC идёт сверху, контент под ним */
+    }
+    .toc-sidebar {
+        position: relative; /* снимаем sticky — в колонке он не нужен */
+        top: 0;
+        width: 100%;
+        max-height: none;
+        margin-bottom: 2rem;
+    }
+}
+
+/* ============================================================
+   АДАПТИВ: мобильный (до 768px)
+   Уменьшаем шрифты, убираем выравнивание по ширине
+   ============================================================ */
+@media (max-width: 768px) {
+    .page-wrapper {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        padding-top: 80px;
+    }
+    .page-title       { font-size: 2rem; }
+    .section-title    { font-size: 1.5rem; }
+    .subsection-title { font-size: 1.25rem; }
+
+    .section-text {
+        font-size: 1rem;
+        text-align: left; /* на мобиле justify выглядит хуже */
+    }
+
+    .content-list li,
+    ul li, ol li {
+        font-size: 1rem;
+    }
+}
+
+/* ============================================================
+   АДАПТИВ: таблица на маленьких экранах (до 600px)
+   ============================================================ */
+@media (max-width: 600px) {
+    .etiquette-table th,
+    .etiquette-table td {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+    }
+}
