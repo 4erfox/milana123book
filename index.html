@@ -1,0 +1,14 @@
+# Создаём index.html в корне, который перенаправляет в public
+cat > index.html << 'EOF'
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=public/">
+    <title>Перенаправление...</title>
+</head>
+<body>
+    <p>Если перенаправление не работает, <a href="public/">нажмите сюда</a></p>
+</body>
+</html>
+EOF
