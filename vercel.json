@@ -1,40 +1,30 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": ".",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
-  "builds": [
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
     {
-      "src": "index.html",
-      "use": "@vercel/static"
+      "source": "/pages/(.*)",
+      "destination": "/pages/$1"
     },
     {
-      "src": "page.html",
-      "use": "@vercel/static"
+      "source": "/docs/(.*)",
+      "destination": "/docs/$1"
     },
     {
-      "src": "admin/**",
-      "use": "@vercel/static"
+      "source": "/styles/(.*)",
+      "destination": "/styles/$1"
     },
     {
-      "src": "styles/**",
-      "use": "@vercel/static"
+      "source": "/scripts/(.*)",
+      "destination": "/scripts/$1"
     },
     {
-      "src": "scripts/**",
-      "use": "@vercel/static"
+      "source": "/data/(.*)",
+      "destination": "/data/$1"
     },
     {
-      "src": "docs/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "pages/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "data/**",
-      "use": "@vercel/static"
+      "source": "/admin/(.*)",
+      "destination": "/admin/$1"
     }
   ]
 }
