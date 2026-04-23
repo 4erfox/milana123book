@@ -1,5 +1,3 @@
-# Создаём index.html в корне, который перенаправляет в public
-cat > index.html << 'EOF'
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +6,6 @@ cat > index.html << 'EOF'
     <title>Перенаправление...</title>
 </head>
 <body>
-    <p>Если перенаправление не работает, <a href="public/">нажмите сюда</a></p>
+    <p>Перенаправление на <a href="public/">public/</a>...</p>
 </body>
 </html>
-EOF
