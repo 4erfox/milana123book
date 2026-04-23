@@ -50,47 +50,102 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 4. ФУНКЦИЯ ЗАГРУЗКИ МЕНЮ ИЗ nav.json (обновляется через админ панель)
-    async function loadNav() {
-        try {
-            const res = await fetch('/data/nav.json?t=' + Date.now());
-            if (!res.ok) return;
-            const nav = await res.json();
-            const sidebarContent = document.querySelector('.sidebar-content');
-            if (!sidebarContent) return;
+    // В начале файла — path.js уже загружен, используем resolvePath
 
-            sidebarContent.innerHTML = nav.map(section => `
-                <div class="menu-section" data-section="${section.id}">
-                    <div class="menu-section-title">
-                        <div class="menu-section-title-content">
-                            <span class="menu-section-title-text">${section.title}</span>
-                            <div class="menu-section-controls">
-                                <span class="menu-section-counter">${section.pages.length}</span>
-                                <div class="menu-section-arrow">
-                                    <svg viewBox="0 0 24 24">
-                                        <polyline points="6 9 12 15 18 9"/>
-                                    </svg>
-                                </div>
+async function loadContacts() {
+    try {
+        const res = await fetch(resolvePath('/data/contacts.json'));
+        const contacts = await res.json();
+        const container = document.querySelector('.contacts-content');
+        if (!container) return;
+        container.innerHTML = contacts.map(c => `
+            <div class="contact-item">
+                <label class="contact-label">${c.title}</label>
+                <a href="${c.href}" class="contact-value" ${c.external ? 'target="_blank"' : ''}>
+                    ${c.subtitle || c.href}
+                </a>
+            </div>
+        `).join('');
+    } catch (err) {
+        console.log('Ошибка загрузки контактов:', err);
+    }
+}
+
+async function loadConfig() {
+    try {
+        // Публичный эндпоинт для конфига (без авторизации)
+        const res = await fetch(resolvePath('/api/config'));
+        if (res.ok) {
+            const data = await res.json();
+            const config = data.config;
+            const mainTitle = document.querySelector('.hero h1');
+            if (mainTitle && config.siteTitle) {
+                mainTitle.innerText = config.siteTitle;
+                document.title = config.siteTitle;
+            }
+            const subTitle = document.querySelector('.subtitle');
+            if (subTitle && config.siteDescription) {
+                subTitle.innerText = config.siteDescription;
+            }
+        } else {
+            // Фолбэк: читаем из локального JSON (для GitHub Pages)
+            const fallbackRes = await fetch(resolvePath('/admin/admin-config.json'));
+            if (fallbackRes.ok) {
+                const config = await fallbackRes.json();
+                const mainTitle = document.querySelector('.hero h1');
+                if (mainTitle && config.siteTitle) mainTitle.innerText = config.siteTitle;
+                const subTitle = document.querySelector('.subtitle');
+                if (subTitle && config.siteDescription) subTitle.innerText = config.siteDescription;
+            }
+        }
+    } catch (err) {
+        console.log('Ошибка загрузки настроек:', err);
+    }
+}
+
+async function loadNav() {
+    try {
+        const res = await fetch(resolvePath('/data/nav.json?t=' + Date.now()));
+        if (!res.ok) return;
+        const nav = await res.json();
+        const sidebarContent = document.querySelector('.sidebar-content');
+        if (!sidebarContent) return;
+
+        sidebarContent.innerHTML = nav.map(section => `
+            <div class="menu-section" data-section="${section.id}">
+                <div class="menu-section-title">
+                    <div class="menu-section-title-content">
+                        <span class="menu-section-title-text">${section.title}</span>
+                        <div class="menu-section-controls">
+                            <span class="menu-section-counter">${section.pages.length}</span>
+                            <div class="menu-section-arrow">
+                                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
                             </div>
                         </div>
                     </div>
-                    <div class="menu-items">
-                        ${section.pages.map(p => `
-                            <a href="${p.href}" class="menu-item" style="text-decoration:none;color:inherit;display:block">${p.title}</a>
-                        `).join('')}
-                    </div>
                 </div>
-            `).join('');
+                <div class="menu-items">
+                    ${section.pages.map(p => `<a href="${resolvePath(p.href)}" class="menu-item" style="text-decoration:none;color:inherit;display:block">${p.title}</a>`).join('')}
+                </div>
+            </div>
+        `).join('');
 
-            // Переподключаем аккордеон для новых элементов
-            sidebarContent.querySelectorAll('.menu-section-title').forEach(title => {
-                title.addEventListener('click', () => {
-                    title.closest('.menu-section')?.classList.toggle('open');
-                });
+        // Переподключаем аккордеон
+        sidebarContent.querySelectorAll('.menu-section-title').forEach(title => {
+            title.addEventListener('click', () => {
+                title.closest('.menu-section')?.classList.toggle('open');
             });
-        } catch (err) {
-            console.log('nav.json не найден, используется меню из HTML:', err);
-        }
+        });
+    } catch (err) {
+        console.log('Ошибка загрузки навигации:', err);
     }
+}
+
+// Запуск
+loadContacts();
+loadConfig();
+loadNav();
+// ... остальной код index.js без изменений
 
     // ЗАПУСКАЕМ ЗАГРУЗКУ ДАННЫХ СРАЗУ ПРИ ОТКРЫТИИ
     loadContacts();
