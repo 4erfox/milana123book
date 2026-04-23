@@ -8,39 +8,104 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/index.css">
+
+    <meta name="description" content="Введение в профессиональную культуру и деловые отношения">
+    <meta name="robots" content="index, follow">
 </head>
 <body>
-    <div class="sidebar-overlay"></div>
+    <div class="sidebar-overlay"></div> 
 
     <aside class="sidebar">
-        <!-- ... ваш HTML ... -->
+        <div class="sidebar-header">
+            <div class="sidebar-logo">Этикет</div>
+            <div class="sidebar-icons">
+                <button class="sidebar-icon-btn" id="contacts-btn" title="Контакты">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22 6 12 13 2 6"/>
+                    </svg>
+                </button>
+                <button class="sidebar-icon-btn" id="theme-toggle" title="Переключить тему">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                </button>
+                <button class="sidebar-icon-btn" id="close-sidebar" title="Закрыть меню">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="sidebar-search">
+            <div class="search-input-wrapper">
+                <div class="search-icon">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                </div>
+                <input type="text" class="search-input" placeholder="Поиск по названию..." id="sidebar-search">
+            </div>
+        </div>
+
+        <div class="sidebar-content">
+            <!-- Меню будет загружено из nav.json через index.js -->
+        </div>
     </aside>
 
     <div class="contacts-menu">
-        <!-- ... контакты ... -->
+        <div class="contacts-header">
+            <span class="contacts-title">Контакты</span>
+            <button class="contacts-close-btn" id="contacts-close-btn">
+                <svg viewBox="0 0 24 24">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+        <div class="contacts-content">
+            <!-- Контакты загрузятся из contacts.json -->
+        </div>
     </div>
 
     <section class="hero">
         <div class="content">
             <div class="accent-line fade-in fade-in-1"></div>
-            <h1 class="fade-in fade-in-2">Этикет</h1>
-            <p class="subtitle fade-in fade-in-3">Введение в профессиональную культуру и деловые отношения.</p>
+            <h1 class="fade-in fade-in-2">Деловой этикет в Казахстане</h1>
+            <p class="subtitle fade-in fade-in-3">Введение в профессиональную культуру и деловые отношения</p>
         </div>
     </section>
 
     <nav class="bottom-nav">
         <div class="nav-container">
             <button class="nav-btn active">
-                <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
                 <span>Содержание</span>
             </button>
             <button class="nav-btn">
-                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <svg viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                </svg>
                 <span>Поиск</span>
             </button>
         </div>
     </nav>
 
+    <!-- ВАЖНО: path.js должен быть первым скриптом -->
     <script src="scripts/path.js"></script>
     <script type="module" src="scripts/index.js"></script>
     <script type="module" src="scripts/search.js"></script>
